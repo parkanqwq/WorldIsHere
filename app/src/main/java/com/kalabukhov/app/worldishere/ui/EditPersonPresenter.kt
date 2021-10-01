@@ -25,32 +25,36 @@ class EditPersonPresenter : EditPersonContract.Presenter{
     override fun onFight(personModel: PersonModel) {
         view?.setState(EditPersonContract.ViewState.LOADING)
         Handler(Looper.getMainLooper()).postDelayed(
-            {onCheckFight(personModel)}, 1000)
+            {onCheckFight(personModel)}, ONE_SECOND)
     }
 
     override fun onCheckFight(personModel: PersonModel) {
-        var bestPower = 0
+        var bestPower = IM_WIN
         for (botBestPower in personsGames.getAllPerson()) {
-            if (botBestPower.power >= personModel.power) bestPower = 1
+            if (botBestPower.power >= personModel.power) bestPower = BOT_WIN
         }
         onResultFight(bestPower)
     }
 
     override fun onResultFight(resultFight: Int) {
-        if (resultFight == 0) view?.setState(EditPersonContract.ViewState.SUCCESS)
+        if (resultFight == IM_WIN) view?.setState(EditPersonContract.ViewState.SUCCESS)
         else view?.setState(EditPersonContract.ViewState.DEFEAT)
     }
 
     override fun onLimitedString(personModel: PersonModel): Boolean {
-        if (personModel.name.length > 10 || personModel.age > 1000 || personModel.power > 100) {
+        if (personModel.name.length > LENGTH_STRING || personModel.age > LENGTH_AGE || personModel.power > LENGTH_POWER) {
             view?.setState(EditPersonContract.ViewState.ERROR)
             return false
         }
         return true
     }
 
-    override fun onChangeAge(age: Int) {
-        view?.setAgeError(1)
+    companion object {
+        const val IM_WIN = 0
+        const val BOT_WIN = 1
+        const val LENGTH_STRING = 10
+        const val LENGTH_AGE = 1000
+        const val LENGTH_POWER = 100
+        const val ONE_SECOND = 1000L
     }
-
 }

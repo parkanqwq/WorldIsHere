@@ -21,6 +21,5 @@ class EditPersonContract {
         fun onCheckFight(personModel: PersonModel)
         fun onResultFight(resultFight: Int)
         fun onLimitedString(personModel: PersonModel) : Boolean
-        fun onChangeAge(age: Int)
     }
 }
