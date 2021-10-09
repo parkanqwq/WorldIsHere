@@ -2,28 +2,18 @@ package com.kalabukhov.app.worldishere.ui
 
 import android.os.Handler
 import android.os.Looper
+import com.github.terrakok.cicerone.Router
+import com.kalabukhov.app.worldishere.Screens
 import com.kalabukhov.app.worldishere.domain.PersonModel
 import com.kalabukhov.app.worldishere.impl.PersonDB
 
-class EditPersonPresenter : EditPersonContract.Presenter{
-
-    private var view: EditPersonContract.View? = null
-    private var personModel: PersonModel? = null
-    private var personsGames: PersonDB = PersonDB()
-
-    override fun onAttach(view: EditPersonContract.View) {
-        this.view = view
-        personModel?.let {
-            view.setPerson(it)
-        }
-    }
-
-    override fun onDetach() {
-        this.view = null
-    }
+class EditPersonPresenter(
+    private val personsGames: PersonDB,
+    private val router: Router
+    ) : EditPersonContract.Presenter() {
 
     override fun onFight(personModel: PersonModel) {
-        view?.setState(EditPersonContract.ViewState.LOADING)
+        viewState.setState(EditPersonContract.ViewState.LOADING)
         Handler(Looper.getMainLooper()).postDelayed(
             {onCheckFight(personModel)}, ONE_SECOND)
     }
@@ -33,17 +23,24 @@ class EditPersonPresenter : EditPersonContract.Presenter{
         for (botBestPower in personsGames.getAllPerson()) {
             if (botBestPower.power >= personModel.power) bestPower = BOT_WIN
         }
-        onResultFight(bestPower)
+        onResultFight(bestPower, personModel)
     }
 
-    override fun onResultFight(resultFight: Int) {
-        if (resultFight == IM_WIN) view?.setState(EditPersonContract.ViewState.SUCCESS)
-        else view?.setState(EditPersonContract.ViewState.DEFEAT)
+    override fun onResultFight(resultFight: Int, personModel: PersonModel) {
+        if (resultFight == IM_WIN) {
+            viewState.setState(EditPersonContract.ViewState.SUCCESS)
+        // для самописного cicerone
+//            viewState.openMainScreen(personModel)
+//            viewState.exit()
+            router.navigateTo(Screens.Main(personModel))
+            router.exit()
+        }
+        else viewState.setState(EditPersonContract.ViewState.DEFEAT)
     }
 
     override fun onLimitedString(personModel: PersonModel): Boolean {
         if (personModel.name.length > LENGTH_STRING || personModel.age > LENGTH_AGE || personModel.power > LENGTH_POWER) {
-            view?.setState(EditPersonContract.ViewState.ERROR)
+            viewState.setState(EditPersonContract.ViewState.ERROR)
             return false
         }
         return true

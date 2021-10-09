@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dimen_16dp"
                     android:text="@string/person_info"
-                    android:textColor="@color/purple_700"
                     android:textSize="@dimen/dimen_header_text_32sp" />
 
                 <com.google.android.material.textfield.TextInputLayout

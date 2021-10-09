@@ -1,17 +1,25 @@
 package com.kalabukhov.app.worldishere.ui
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.google.android.material.snackbar.Snackbar
 import com.kalabukhov.app.worldishere.R
 import com.kalabukhov.app.worldishere.databinding.ActivityEditPersonBinding
 import com.kalabukhov.app.worldishere.domain.PersonModel
+import com.kalabukhov.app.worldishere.impl.PersonDB
+import com.kalabukhov.app.worldishere.impl.util.app
+import com.kalabukhov.app.worldishere.ui.main.MainActivity
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 
-class EditPersonInfoActivity : AppCompatActivity(), EditPersonContract.View {
+class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
 
-    private var presenter: EditPersonContract.Presenter = EditPersonPresenter()
+    private val presenter by moxyPresenter { EditPersonPresenter(PersonDB(), app.router) }
 
     private lateinit var binding: ActivityEditPersonBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +27,6 @@ class EditPersonInfoActivity : AppCompatActivity(), EditPersonContract.View {
         binding = ActivityEditPersonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        presenter.onAttach(this)
         initView()
     }
 
@@ -60,7 +67,7 @@ class EditPersonInfoActivity : AppCompatActivity(), EditPersonContract.View {
             }
             EditPersonContract.ViewState.SUCCESS -> {
                 stopLoadingActions()
-                Snackbar.make(root, R.string.im_win, Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(this@EditPersonInfoActivity, R.string.im_win, Toast.LENGTH_SHORT).show()
             }
             EditPersonContract.ViewState.ERROR -> {
                 stopLoadingActions()
@@ -88,15 +95,32 @@ class EditPersonInfoActivity : AppCompatActivity(), EditPersonContract.View {
         binding.agePerson.error = getErrorAgeByCode(errorCode)
     }
 
+// самодельный класс cicerone
+//    override fun exit() {
+//        finish()
+//    }
+//
+//    override fun openMainScreen(personModel: PersonModel?) {
+//
+//      app.router.openMainScreen(this, personModel)
+//    }
+
     private fun getErrorAgeByCode(errorCode: Int) : String {
         var errorAge: String = resources.getString(R.string.error)
         if (errorCode == BIG_AGE_BY_CODE) errorAge = resources.getString(R.string.error_big_age)
         return errorAge
     }
 
-    override fun onDestroy() {
-        presenter.onDetach()
-        super.onDestroy()
+    private val navigator by lazy { AppNavigator(this, binding.root.id) }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        app.navigatorHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        app.navigatorHolder.removeNavigator()
+        super.onPause()
     }
 
     companion object {
