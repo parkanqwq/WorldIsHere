@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">World Is Here</string>
+    <string name="person_info">Информация персонажа</string>
+    <string name="name">Имя</string>
+    <string name="age">Возраст</string>
+    <string name="power">Сила</string>
+    <string name="fight">Бой!</string>
+    <string name="error">error</string>
+    <string name="im_win">Победа над врагами!</string>
+    <string name="error_limited">Ошибка: превышены значения!</string>
+    <string name="you_lose">Вы проиграли!</string>
+    <string name="strings_is_empty">Заполните все данные!</string>
+    <string name="error_big_age">Недопустимый возраст, кошмар ты старый!</string>
+    <string name="text_hi">Hi,</string>
+    <string name="text_age_person">Ваш возраст:</string>
+    <string name="text_power_person">Ваша сила:</string>
 </resources>
