@@ -14,4 +14,7 @@
     <string name="text_hi">Hi,</string>
     <string name="text_age_person">Ваш возраст:</string>
     <string name="text_power_person">Ваша сила:</string>
+    <string name="change_data_profile">Обновить данные</string>
+    <string name="new_age_person">Новый возраст</string>
+    <string name="new_name">Новое имя</string>
 </resources>

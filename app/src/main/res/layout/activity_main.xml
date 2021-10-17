@@ -86,6 +86,20 @@
                 android:padding="@dimen/dimen_layout_margin_8dp"
                 android:textSize="@dimen/dimen_text_text_16sp"
                 tools:text="name" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_new_name"
+                android:hint="@string/new_name"
+                android:layout_margin="@dimen/dimen_layout_margin_8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/button_change_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/change_data_profile" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -5,7 +5,7 @@ import android.os.Looper
 import com.github.terrakok.cicerone.Router
 import com.kalabukhov.app.worldishere.Screens
 import com.kalabukhov.app.worldishere.domain.PersonModel
-import com.kalabukhov.app.worldishere.impl.PersonDB
+import com.kalabukhov.app.worldishere.server.PersonDB
 
 class EditPersonPresenter(
     private val personsGames: PersonDB,

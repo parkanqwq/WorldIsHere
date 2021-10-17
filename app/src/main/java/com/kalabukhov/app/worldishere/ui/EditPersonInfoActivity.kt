@@ -1,8 +1,6 @@
 package com.kalabukhov.app.worldishere.ui
 
-import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,9 +9,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.kalabukhov.app.worldishere.R
 import com.kalabukhov.app.worldishere.databinding.ActivityEditPersonBinding
 import com.kalabukhov.app.worldishere.domain.PersonModel
-import com.kalabukhov.app.worldishere.impl.PersonDB
+import com.kalabukhov.app.worldishere.server.PersonDB
 import com.kalabukhov.app.worldishere.impl.util.app
-import com.kalabukhov.app.worldishere.ui.main.MainActivity
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 
@@ -54,9 +51,9 @@ class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
     }
 
     private fun checkTheIsEmptyEdit() = with(binding) {
-        namePerson.text.toString().isNotEmpty() &&
-            agePerson.text.toString().isNotEmpty() &&
-            powerPerson.text.toString().isNotEmpty()
+        namePerson.text.toString().isNotBlank() &&
+            agePerson.text.toString().isNotBlank() &&
+            powerPerson.text.toString().isNotBlank()
     }
 
     override fun setState(state: EditPersonContract.ViewState) = with(binding) {
@@ -124,7 +121,7 @@ class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
     }
 
     companion object {
-        const val ID = 0
+        const val ID = "0"
         const val ERROR_AGE = 1
         const val BIG_AGE = 110
         const val BIG_AGE_BY_CODE = 1
