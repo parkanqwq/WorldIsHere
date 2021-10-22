@@ -17,4 +17,6 @@
     <string name="change_data_profile">Обновить данные</string>
     <string name="new_age_person">Новый возраст</string>
     <string name="new_name">Новое имя</string>
+    <string name="heath">Лечиться</string>
+    <string name="hit">Атаковать</string>
 </resources>
