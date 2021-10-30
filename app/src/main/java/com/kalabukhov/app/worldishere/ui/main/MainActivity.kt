@@ -15,6 +15,7 @@ import com.kalabukhov.app.worldishere.databinding.ActivityMainBinding
 import com.kalabukhov.app.worldishere.domain.PersonModel
 import com.kalabukhov.app.worldishere.domain.PersonRepo
 import com.kalabukhov.app.worldishere.impl.PersonRepoImpl
+import com.kalabukhov.app.worldishere.ui.less5.GitHubTab
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import moxy.MvpAppCompatActivity

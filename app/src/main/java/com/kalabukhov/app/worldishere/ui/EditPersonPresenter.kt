@@ -46,6 +46,11 @@ class EditPersonPresenter(
         return true
     }
 
+    override fun onLesson5() {
+        router.navigateTo(Screens.GitHub())
+        router.exit()
+    }
+
     companion object {
         const val IM_WIN = 0
         const val BOT_WIN = 1
