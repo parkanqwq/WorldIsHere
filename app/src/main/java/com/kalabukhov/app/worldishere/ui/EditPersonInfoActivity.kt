@@ -1,5 +1,6 @@
 package com.kalabukhov.app.worldishere.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -25,6 +26,13 @@ class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
         setContentView(binding.root)
 
         initView()
+        lesson5()
+    }
+
+    private fun lesson5() {
+        binding.less5BtnView.setOnClickListener {
+            presenter.onLesson5()
+        }
     }
 
     private fun initView() = with(binding){

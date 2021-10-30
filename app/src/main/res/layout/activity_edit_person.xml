@@ -107,6 +107,12 @@
                     android:layout_margin="@dimen/dimen_layout_margin_8dp"
                     android:text="@string/fight" />
 
+                <Button
+                    android:id="@+id/less5_btn_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/less5" />
+
             </LinearLayout>
         </ScrollView>
 </FrameLayout>

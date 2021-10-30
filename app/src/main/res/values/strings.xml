@@ -2,10 +2,11 @@
     <string name="app_name">World Is Here</string>
     <string name="person_info">Информация персонажа</string>
     <string name="name">Имя</string>
+    <string name="nameEnglish">name</string>
     <string name="age">Возраст</string>
     <string name="power">Сила</string>
     <string name="fight">Бой!</string>
-    <string name="error">error</string>
+    <string name="error">error:</string>
     <string name="im_win">Победа над врагами!</string>
     <string name="error_limited">Ошибка: превышены значения!</string>
     <string name="you_lose">Вы проиграли!</string>
@@ -19,4 +20,8 @@
     <string name="new_name">Новое имя</string>
     <string name="heath">Лечиться</string>
     <string name="hit">Атаковать</string>
+    <string name="less5">урок 5</string>
+    <string name="size">size:</string>
+    <string name="forks">forks:</string>
+    <string name="find">искать</string>
 </resources>

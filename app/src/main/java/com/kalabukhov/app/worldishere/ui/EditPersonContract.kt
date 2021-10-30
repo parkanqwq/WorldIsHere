@@ -32,5 +32,6 @@ class EditPersonContract {
         abstract fun onCheckFight(personModel: PersonModel)
         abstract fun onResultFight(resultFight: Int, personModel: PersonModel)
         abstract fun onLimitedString(personModel: PersonModel) : Boolean
+        abstract fun onLesson5()
     }
 }
