@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kalabukhov.app.worldishere.R
 import com.kalabukhov.app.worldishere.databinding.ItemGitHubUserBinding
 import com.kalabukhov.app.worldishere.domain.GitHubRepoUserEntity
+import com.kalabukhov.app.worldishere.domain.entity.UserRepositoriesEntity
 import com.squareup.picasso.Picasso
 
 class AdapterGitHubUsersRepo :
     RecyclerView.Adapter<AdapterGitHubUsersRepo.MainViewHolder>() {
 
-    private var gitHubUsersData: List<GitHubRepoUserEntity> = listOf()
+    private var gitHubUsersData: List<UserRepositoriesEntity> = listOf()
 
-    fun setUsersGitHub(data: List<GitHubRepoUserEntity>) {
+    fun setUsersGitHub(data: List<UserRepositoriesEntity>) {
         gitHubUsersData = data
         notifyDataSetChanged()
     }
@@ -36,20 +37,20 @@ class AdapterGitHubUsersRepo :
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemGitHubUserBinding.bind(view)
-        fun bind(gitHubRepoEntity: GitHubRepoUserEntity) = with(binding){
+        fun bind(gitHubRepoEntity: UserRepositoriesEntity) = with(binding){
             nameTextView.text = gitHubRepoEntity.name
-            Picasso
-                .get()
-                .load(gitHubRepoEntity.owner.avatarUrl)
-                .into(imageProfileImageView)
-            root.setOnClickListener {
-                Toast.makeText(root.context,
-                    root.context.resources.getString(R.string.size) +
-                        gitHubRepoEntity.size + "\n" +
-                        root.context.resources.getString(R.string.forks) +
-                        gitHubRepoEntity.forksCount,
-                Toast.LENGTH_SHORT).show()
-            }
+//            Picasso
+//                .get()
+//                .load(gitHubRepoEntity.owner.avatarUrl)
+//                .into(imageProfileImageView)
+//            root.setOnClickListener {
+//                Toast.makeText(root.context,
+//                    root.context.resources.getString(R.string.size) +
+//                        gitHubRepoEntity.size + "\n" +
+//                        root.context.resources.getString(R.string.forks) +
+//                        gitHubRepoEntity.forksCount,
+//                Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 }
