@@ -8,11 +8,12 @@ import com.kalabukhov.app.worldishere.app
 import com.kalabukhov.app.worldishere.databinding.ActivityGitHubUsersRepoBinding
 import com.kalabukhov.app.worldishere.ui.adapter.AdapterGitHubUsersRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 class GitHubUsersRepoActivity : AppCompatActivity() {
 
-    private var disposable: Disposable? = null
+    private var disposable: CompositeDisposable = CompositeDisposable()
     private lateinit var binding: ActivityGitHubUsersRepoBinding
     private val adapter = AdapterGitHubUsersRepo()
 
@@ -22,7 +23,7 @@ class GitHubUsersRepoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.repoRecyclerView.adapter = adapter
-        disposable = app.gitHabUsersApiRepo.listRepo(intent.getStringExtra(
+        disposable.add(app.gitHabUsersApiRepo.listRepo(intent.getStringExtra(
             resources.getString(R.string.nameEnglish))!!)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -33,11 +34,11 @@ class GitHubUsersRepoActivity : AppCompatActivity() {
                     Toast.makeText(this@GitHubUsersRepoActivity,
                         resources.getString(R.string.error) +
                             thr.message, Toast.LENGTH_SHORT).show()
-                })
+                }))
     }
 
     override fun onDestroy() {
-        disposable?.dispose()
+        disposable.dispose()
         super.onDestroy()
     }
 }

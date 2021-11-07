@@ -17,10 +17,16 @@
         android:text="@string/nameEnglish" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/find_user_button_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/find" />
+
+    <Button
+        android:id="@+id/clear_button_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_base" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

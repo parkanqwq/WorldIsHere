@@ -5,43 +5,104 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Transformations.map
 import com.kalabukhov.app.worldishere.R
 import com.kalabukhov.app.worldishere.app
+import com.kalabukhov.app.worldishere.domain.entity.UserEntity
 import com.kalabukhov.app.worldishere.databinding.ActivityGitHubTabBinding
 import com.kalabukhov.app.worldishere.domain.GitHubRepoEntity
-import com.kalabukhov.app.worldishere.ui.adapter.AdapterGitHubUsers
+import com.kalabukhov.app.worldishere.ui.adapter.AdapterRoomUsers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GitHubTab : AppCompatActivity() {
 
     private lateinit var binding: ActivityGitHubTabBinding
-    private var disposable: Disposable? = null
+    private var disposable: CompositeDisposable = CompositeDisposable()
+    private val userRepo by lazy { app.userRepo }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGitHubTabBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapterRoom
+        binding.findUserButtonView.setOnClickListener {
+            getUsersGitHub()
+        }
 
-        binding.button.setOnClickListener {
-            binding.nameUserEditText.text = binding.nameUserEditText.text
-            disposable = app.gitHabUsersApi.listRepo(binding.nameUserEditText.text.toString())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { repos ->
-                        val gitHubUser: ArrayList<GitHubRepoEntity> = arrayListOf()
-                        gitHubUser.add(repos)
-                        adapter.setUsersGitHub(gitHubUser)
-                    } ,
-                    { thr ->
-                        Toast.makeText(this, resources.getString(R.string.error)+
-                                thr.message, Toast.LENGTH_SHORT).show()
-                    })
+        disposableForUsers()
+        clearBase()
+    }
+
+    private fun getUsersGitHub() {
+        binding.nameUserEditText.text = binding.nameUserEditText.text
+        disposable.add(app.gitHabUsersApi.listRepo(binding.nameUserEditText.text.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { repos ->
+                    addDbUsers(repos)
+                } ,
+                { thr ->
+                    Toast.makeText(this, resources.getString(R.string.error)+
+                            thr.message, Toast.LENGTH_SHORT).show()
+                }))
+
+
+    }
+
+    private fun disposableForUsers() {
+        disposable.add(
+            userRepo.user
+                .subscribe {
+                    historyUsers()
+                }
+        )
+    }
+
+    private fun addDbUsers(gitHubRepoEntity: GitHubRepoEntity) {
+        userRepo.put(
+            UserEntity(UUID.randomUUID().toString(),
+                gitHubRepoEntity.name.toString(),
+                gitHubRepoEntity.avatarUrl.toString())
+        )
+//            .subscribeOn(Schedulers.io())
+//            .subscribe()
+//            .autoDisposable()
+    }
+
+    private fun historyUsers() {
+        userRepo.user
+            .subscribe({ repos ->
+                adapterRoom.setUsersGitHubRoom(repos.asReversed())
+            },
+                { thr ->
+                    Toast.makeText(this, resources.getString(R.string.error)+
+                            thr.message, Toast.LENGTH_SHORT).show()
+                })
+    }
+
+    private fun clearBase() {
+        binding.clearButtonView.setOnClickListener {
+            userRepo.clear()
         }
     }
+
+//    private fun Completable.toLoadData(): Single<List<UserEntity>> {
+//        return this
+//            .andThen(userDao.getGitHubUsers())
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .doOnError {
+//                Toast.makeText(this@GitHubTab, resources.getString(R.string.error)+
+//                        it.message, Toast.LENGTH_SHORT).show()
+//            }
+//    }
 
     private val onObjectListener = object : OnItemViewClickListener {
         override fun onItemViewClick(gitHubRepoEntity: GitHubRepoEntity) {
@@ -55,7 +116,7 @@ class GitHubTab : AppCompatActivity() {
         fun onItemViewClick(gitHubRepoEntity: GitHubRepoEntity)
     }
 
-    private val adapter = AdapterGitHubUsers(onObjectListener)
+    private val adapterRoom = AdapterRoomUsers(onObjectListener)
 
     companion object {
         fun createLauncherIntentLesson5(context: Context): Intent {
@@ -64,7 +125,11 @@ class GitHubTab : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        disposable?.dispose()
+        disposable.dispose()
         super.onDestroy()
+    }
+
+    private fun Disposable.autoDisposable() {
+        disposable.add(this)
     }
 }
