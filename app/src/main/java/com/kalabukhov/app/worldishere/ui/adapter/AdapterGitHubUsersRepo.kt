@@ -39,10 +39,10 @@ class AdapterGitHubUsersRepo :
         private val binding = ItemGitHubUserBinding.bind(view)
         fun bind(gitHubRepoEntity: UserRepositoriesEntity) = with(binding){
             nameTextView.text = gitHubRepoEntity.name
-//            Picasso
-//                .get()
-//                .load(gitHubRepoEntity.owner.avatarUrl)
-//                .into(imageProfileImageView)
+            Picasso
+                .get()
+                .load(gitHubRepoEntity.avatarUrl)
+                .into(imageProfileImageView)
 //            root.setOnClickListener {
 //                Toast.makeText(root.context,
 //                    root.context.resources.getString(R.string.size) +
