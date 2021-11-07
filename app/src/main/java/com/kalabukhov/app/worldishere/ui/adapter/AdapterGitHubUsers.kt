@@ -15,9 +15,9 @@ class AdapterGitHubUsers (
     ) :
     RecyclerView.Adapter<AdapterGitHubUsers.MainViewHolder>() {
 
-    private var gitHubUsersData: List<GitHubRepoEntity> = listOf()
+    private var gitHubUsersData: ArrayList<GitHubRepoEntity> = arrayListOf()
 
-    fun setUsersGitHub(data: List<GitHubRepoEntity>) {
+    fun setUsersGitHub(data: ArrayList<GitHubRepoEntity>) {
         gitHubUsersData = data
         notifyDataSetChanged()
     }

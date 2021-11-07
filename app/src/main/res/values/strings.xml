@@ -24,4 +24,6 @@
     <string name="size">size:</string>
     <string name="forks">forks:</string>
     <string name="find">искать</string>
+    <string name="history">история</string>
+    <string name="clear_base">удалить базу</string>
 </resources>

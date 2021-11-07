@@ -3,8 +3,13 @@ package com.kalabukhov.app.worldishere
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
+import androidx.room.Room
 import com.github.terrakok.cicerone.Cicerone
 import com.kalabukhov.app.worldishere.bus.EventBus
+import com.kalabukhov.app.worldishere.data.UserDb
+import com.kalabukhov.app.worldishere.data.UserDbRepositories
+import com.kalabukhov.app.worldishere.data.UserRoomRepoImpl
+import com.kalabukhov.app.worldishere.data.UserRoomRepoRepositoriesImpl
 import com.kalabukhov.app.worldishere.rest.ContextHolder
 import com.kalabukhov.app.worldishere.rest.GitHubApi
 import com.kalabukhov.app.worldishere.rest.GitHubApiRepo
@@ -19,6 +24,26 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 //}
 
 class App : Application() {
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            UserDb::class.java,
+            "users.db"
+        ).build()
+    }
+    private val userDao by lazy { db.userDoa() }
+    val userRepo by lazy { UserRoomRepoImpl(userDao) }
+
+    private val dbRepositories by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            UserDbRepositories::class.java,
+            "repositories.db"
+        ).build()
+    }
+    private val userRepositoriesDao by lazy { dbRepositories.userRepositoriesDao() }
+    val userRepositoriesRepo by lazy { UserRoomRepoRepositoriesImpl(userRepositoriesDao) }
+
     private val retrofit =  Retrofit.Builder()
         .baseUrl("https://api.github.com/")
         .addConverterFactory(MoshiConverterFactory.create())

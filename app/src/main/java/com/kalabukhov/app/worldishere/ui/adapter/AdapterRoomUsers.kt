@@ -3,20 +3,22 @@ package com.kalabukhov.app.worldishere.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.kalabukhov.app.worldishere.R
 import com.kalabukhov.app.worldishere.databinding.ItemGitHubUserBinding
-import com.kalabukhov.app.worldishere.domain.GitHubRepoUserEntity
-import com.kalabukhov.app.worldishere.domain.entity.UserRepositoriesEntity
+import com.kalabukhov.app.worldishere.domain.GitHubRepoEntity
+import com.kalabukhov.app.worldishere.domain.entity.UserEntity
+import com.kalabukhov.app.worldishere.ui.less5.GitHubTab
 import com.squareup.picasso.Picasso
 
-class AdapterGitHubUsersRepo :
-    RecyclerView.Adapter<AdapterGitHubUsersRepo.MainViewHolder>() {
+class AdapterRoomUsers (
+    private var onItemViewClickListener: GitHubTab.OnItemViewClickListener?
+) :
+    RecyclerView.Adapter<AdapterRoomUsers.MainViewHolder>() {
 
-    private var gitHubUsersData: List<UserRepositoriesEntity> = listOf()
+    private var gitHubUsersData: List<UserEntity> = listOf()
 
-    fun setUsersGitHub(data: List<UserRepositoriesEntity>) {
+    fun setUsersGitHubRoom(data: List<UserEntity>) {
         gitHubUsersData = data
         notifyDataSetChanged()
     }
@@ -37,20 +39,16 @@ class AdapterGitHubUsersRepo :
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemGitHubUserBinding.bind(view)
-        fun bind(gitHubRepoEntity: UserRepositoriesEntity) = with(binding){
-            nameTextView.text = gitHubRepoEntity.name
+        fun bind(userEntity: UserEntity) = with(binding){
+            nameTextView.text = userEntity.name
             Picasso
                 .get()
-                .load(gitHubRepoEntity.avatarUrl)
+                .load(userEntity.imageUrl)
                 .into(imageProfileImageView)
-//            root.setOnClickListener {
-//                Toast.makeText(root.context,
-//                    root.context.resources.getString(R.string.size) +
-//                        gitHubRepoEntity.size + "\n" +
-//                        root.context.resources.getString(R.string.forks) +
-//                        gitHubRepoEntity.forksCount,
-//                Toast.LENGTH_SHORT).show()
-//            }
+            root.setOnClickListener {
+                val gitHubRepoEntity = GitHubRepoEntity(userEntity.name, userEntity.imageUrl)
+                onItemViewClickListener?.onItemViewClick(gitHubRepoEntity)
+            }
         }
     }
 }
