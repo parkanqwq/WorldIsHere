@@ -15,7 +15,6 @@ import com.kalabukhov.app.worldishere.databinding.ActivityMainBinding
 import com.kalabukhov.app.worldishere.domain.PersonModel
 import com.kalabukhov.app.worldishere.domain.PersonRepo
 import com.kalabukhov.app.worldishere.impl.PersonRepoImpl
-import com.kalabukhov.app.worldishere.ui.less5.GitHubTab
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import moxy.MvpAppCompatActivity
@@ -25,6 +24,7 @@ import java.util.*
 class MainActivity : MvpAppCompatActivity(), FightAmazonkaContract.View {
 
     private val presenter by moxyPresenter { FightAmazonkaPresenter(app.router) }
+
     private lateinit var binding: ActivityMainBinding
     private val personRepo: PersonRepo = PersonRepoImpl()
 
@@ -119,7 +119,7 @@ class MainActivity : MvpAppCompatActivity(), FightAmazonkaContract.View {
 
     private fun goFightGames() {
         binding.goGames.setOnClickListener {
-            presenter.onHit(app)
+            presenter.onHit()
             binding.goGames.isEnabled = false
             btnOn()
         }
@@ -154,10 +154,10 @@ class MainActivity : MvpAppCompatActivity(), FightAmazonkaContract.View {
 
     private fun eventForPower() = with(binding){
         fightBtn.setOnClickListener {
-            presenter.onHit(app)
+            presenter.onHit()
         }
         minusPowerBtn.setOnClickListener {
-            presenter.onHeath(app)
+            presenter.onHeath()
         }
     }
 

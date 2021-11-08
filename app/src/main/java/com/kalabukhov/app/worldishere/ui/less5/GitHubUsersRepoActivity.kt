@@ -8,20 +8,27 @@ import com.kalabukhov.app.worldishere.app
 import com.kalabukhov.app.worldishere.databinding.ActivityGitHubUsersRepoBinding
 import com.kalabukhov.app.worldishere.domain.GitHubRepoUserEntity
 import com.kalabukhov.app.worldishere.domain.GitHubRepoUserEntityDTO
+import com.kalabukhov.app.worldishere.domain.UsersRepositoriesRepo
 import com.kalabukhov.app.worldishere.domain.entity.UserRepositoriesEntity
+import com.kalabukhov.app.worldishere.rest.GitHubApi
+import com.kalabukhov.app.worldishere.rest.GitHubApiRepo
 import com.kalabukhov.app.worldishere.ui.adapter.AdapterGitHubUsersRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.internal.wait
+import org.koin.android.ext.android.inject
+import java.util.*
 
 class GitHubUsersRepoActivity : AppCompatActivity() {
 
     private var disposable: CompositeDisposable = CompositeDisposable()
     private lateinit var binding: ActivityGitHubUsersRepoBinding
     private val adapter = AdapterGitHubUsersRepo()
-    private val userRepositoriesRepo by lazy { app.userRepositoriesRepo }
+    private val userRepositoriesRepo: UsersRepositoriesRepo
+    by inject()
+    private val gitHabUsersApiRepo: GitHubApiRepo by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +45,18 @@ class GitHubUsersRepoActivity : AppCompatActivity() {
         //но если данные не обновленны, точнее пока они обновляются, приложение
         // показывает старый список из руума
         userRepositoriesRepo.userRepositories
-            .subscribe { repos ->
+            .subscribe ({ repos ->
                 adapter.setUsersGitHub(repos)
-            }
+            },
+                { thr ->
+                    Toast.makeText(this, resources.getString(R.string.error)+
+                            thr.message, Toast.LENGTH_SHORT).show()
+                })
     }
 
     private fun loadingUsersWeb() {
         //загружаем репозитории с сервера
-        disposable.add(app.gitHabUsersApiRepo.listRepo(intent.getStringExtra(
+        disposable.add(gitHabUsersApiRepo.listRepo(intent.getStringExtra(
             resources.getString(R.string.nameEnglish))!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -74,17 +85,12 @@ class GitHubUsersRepoActivity : AppCompatActivity() {
     private fun loadInRoomUsers(repos: List<GitHubRepoUserEntity>) {
         userRepositoriesRepo.clear()
         //преобразуем из одного власса в другой
-        val userRepositoriesEntity: ArrayList<UserRepositoriesEntity> = arrayListOf()
         for (userRepositories in repos) {
-            userRepositoriesEntity.add(UserRepositoriesEntity(
-                "0",
+            userRepositoriesRepo.put(UserRepositoriesEntity(
+                UUID.randomUUID().toString(),
                 userRepositories.name.toString(),
                 userRepositories.owner.avatarUrl
             ))
-        }
-        //добавляем актуальные данные с сервера в руум
-        for (usersRepositories in userRepositoriesEntity) {
-            userRepositoriesRepo.put(usersRepositories)
         }
     }
 

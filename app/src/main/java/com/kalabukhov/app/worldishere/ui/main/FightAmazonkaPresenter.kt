@@ -3,33 +3,35 @@ package com.kalabukhov.app.worldishere.ui.main
 import android.os.Handler
 import android.os.Looper
 import com.github.terrakok.cicerone.Router
-import com.kalabukhov.app.worldishere.App
 import com.kalabukhov.app.worldishere.bus.AttackEvent
+import com.kalabukhov.app.worldishere.bus.EventBus
 import com.kalabukhov.app.worldishere.bus.HealthEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import org.koin.java.KoinJavaComponent.inject
 
 class FightAmazonkaPresenter(
     private val router: Router
 ) : FightAmazonkaContract.Presenter() {
 
+    private val imAttackBus: EventBus by inject(EventBus::class.java)
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var beginFight = true
     private var theAnd = true
 
-    override fun onHit(app: App) {
-        app.imAttackBus.post(AttackEvent())
-        onWaiting(app)
+    override fun onHit() {
+        imAttackBus.post(AttackEvent())
+        onWaiting()
     }
 
-    override fun onHeath(app: App) {
-        app.imAttackBus.post(HealthEvent())
-        onWaiting(app)
+    override fun onHeath() {
+        imAttackBus.post(HealthEvent())
+        onWaiting()
     }
 
-    override fun onWaiting(app: App) {
+    override fun onWaiting() {
         viewState.setState(FightAmazonkaContract.ViewState.IMPREPARATION)
-        onResultFight(app)
+        onResultFight()
     }
 
     override fun onHitOrHeath() {
@@ -48,10 +50,10 @@ class FightAmazonkaPresenter(
         }
     }
 
-    override fun onResultFight(app: App) {
+    override fun onResultFight() {
         if (beginFight) {
             beginFight = false
-            compositeDisposable.add(app.imAttackBus.get()
+            compositeDisposable.add(imAttackBus.get()
 //            .doOnNext{
 //              // действия поток 1 (main)
 //            }

@@ -3,20 +3,12 @@ package com.kalabukhov.app.worldishere
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.room.Room
 import com.github.terrakok.cicerone.Cicerone
-import com.kalabukhov.app.worldishere.bus.EventBus
-import com.kalabukhov.app.worldishere.data.UserDb
-import com.kalabukhov.app.worldishere.data.UserDbRepositories
-import com.kalabukhov.app.worldishere.data.UserRoomRepoImpl
-import com.kalabukhov.app.worldishere.data.UserRoomRepoRepositoriesImpl
+import com.kalabukhov.app.worldishere.di.dbModuleUsers
+import com.kalabukhov.app.worldishere.di.retrofitModule
 import com.kalabukhov.app.worldishere.rest.ContextHolder
-import com.kalabukhov.app.worldishere.rest.GitHubApi
-import com.kalabukhov.app.worldishere.rest.GitHubApiRepo
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 // самодельный класс cicerone
 //class App : Application() {
@@ -24,44 +16,48 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 //}
 
 class App : Application() {
-    private val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            UserDb::class.java,
-            "users.db"
-        ).build()
-    }
-    private val userDao by lazy { db.userDoa() }
-    val userRepo by lazy { UserRoomRepoImpl(userDao) }
+//    private val db by lazy {
+//        Room.databaseBuilder(
+//            applicationContext,
+//            UserDb::class.java,
+//            "users.db"
+//        ).build()
+//    }
+//    private val userDao by lazy { db.userDoa() }
+//    val userRepo by lazy { UserRoomRepoImpl(userDao) }
 
-    private val dbRepositories by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            UserDbRepositories::class.java,
-            "repositories.db"
-        ).build()
-    }
-    private val userRepositoriesDao by lazy { dbRepositories.userRepositoriesDao() }
-    val userRepositoriesRepo by lazy { UserRoomRepoRepositoriesImpl(userRepositoriesDao) }
+//    private val dbRepositories by lazy {
+//        Room.databaseBuilder(
+//            applicationContext,
+//            UserDbRepositories::class.java,
+//            "repositories.db"
+//        ).build()
+//    }
+//    private val userRepositoriesDao by lazy { dbRepositories.userRepositoriesDao() }
+//    val userRepositoriesRepo by lazy { UserRoomRepoRepositoriesImpl(userRepositoriesDao) }
 
-    private val retrofit =  Retrofit.Builder()
-        .baseUrl("https://api.github.com/")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-        .build()
-    val gitHabUsersApi: GitHubApi = retrofit.create(GitHubApi::class.java)
-    val gitHabUsersApiRepo: GitHubApiRepo = retrofit.create(GitHubApiRepo::class.java)
+//    private val retrofit =  Retrofit.Builder()
+//        .baseUrl("https://api.github.com/")
+//        .addConverterFactory(MoshiConverterFactory.create())
+//        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+//        .build()
+//    val gitHabUsersApi: GitHubApi = retrofit.create(GitHubApi::class.java)
+//    val gitHabUsersApiRepo: GitHubApiRepo = retrofit.create(GitHubApiRepo::class.java)
 
     private val cicerone = Cicerone.create()
     val router get() = cicerone.router
     val navigatorHolder get() = cicerone.getNavigatorHolder()
 
-    val imAttackBus = EventBus()
-    val amazonkaAttackBus = EventBus()
+//    val imAttackBus = EventBus()
+//    val amazonkaAttackBus = EventBus()
 
     override fun onCreate() {
         super.onCreate()
         initDependencies()
+        startKoin {
+            androidContext(this@App)
+            modules(dbModuleUsers, retrofitModule)
+        }
     }
 
     private fun initDependencies() {

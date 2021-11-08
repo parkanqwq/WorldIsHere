@@ -1,6 +1,5 @@
 package com.kalabukhov.app.worldishere.ui
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -10,10 +9,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.kalabukhov.app.worldishere.R
 import com.kalabukhov.app.worldishere.databinding.ActivityEditPersonBinding
 import com.kalabukhov.app.worldishere.domain.PersonModel
-import com.kalabukhov.app.worldishere.server.PersonDB
 import com.kalabukhov.app.worldishere.impl.util.app
+import com.kalabukhov.app.worldishere.server.PersonDB
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+import org.koin.android.ext.android.inject
 
 class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
 
@@ -124,7 +124,7 @@ class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
     }
 
     override fun onPause() {
-        app.navigatorHolder.removeNavigator()
+       app.navigatorHolder.removeNavigator()
         super.onPause()
     }
 
