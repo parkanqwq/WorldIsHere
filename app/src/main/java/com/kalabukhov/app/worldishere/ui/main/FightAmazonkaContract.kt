@@ -18,11 +18,11 @@ class FightAmazonkaContract {
     }
 
     abstract class Presenter : MvpPresenter<View>() {
-        abstract fun onHit(app: App)
-        abstract fun onHeath(app: App)
-        abstract fun onWaiting(app: App)
+        abstract fun onHit()
+        abstract fun onHeath()
+        abstract fun onWaiting()
         abstract fun onHitOrHeath()
-        abstract fun onResultFight(app: App)
+        abstract fun onResultFight()
         abstract fun onFinishFight(boolean: Boolean)
     }
 }

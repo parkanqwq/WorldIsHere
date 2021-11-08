@@ -5,25 +5,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Transformations.map
 import com.kalabukhov.app.worldishere.R
-import com.kalabukhov.app.worldishere.app
 import com.kalabukhov.app.worldishere.domain.entity.UserEntity
 import com.kalabukhov.app.worldishere.databinding.ActivityGitHubTabBinding
 import com.kalabukhov.app.worldishere.domain.GitHubRepoEntity
+import com.kalabukhov.app.worldishere.domain.UsersRepo
+import com.kalabukhov.app.worldishere.rest.GitHubApi
 import com.kalabukhov.app.worldishere.ui.adapter.AdapterRoomUsers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.koin.android.ext.android.inject
 import java.util.*
-import kotlin.collections.ArrayList
 
 class GitHubTab : AppCompatActivity() {
 
     private lateinit var binding: ActivityGitHubTabBinding
     private var disposable: CompositeDisposable = CompositeDisposable()
-    private val userRepo by lazy { app.userRepo }
+//    private val userRepo by lazy { app.userRepo }
+    private val userRepo: UsersRepo by inject()
+    private val gitHabUsersApi: GitHubApi by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,7 @@ class GitHubTab : AppCompatActivity() {
 
     private fun getUsersGitHub() {
         binding.nameUserEditText.text = binding.nameUserEditText.text
-        disposable.add(app.gitHabUsersApi.listRepo(binding.nameUserEditText.text.toString())
+        disposable.add(gitHabUsersApi.listRepo(binding.nameUserEditText.text.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
