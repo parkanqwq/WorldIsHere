@@ -25,7 +25,7 @@ import java.util.*
 class MainActivity : MvpAppCompatActivity(), FightAmazonkaContract.View {
 
     private val fightAmazonkaPresenter: FightAmazonkaPresenter by inject()
-    private val presenter by moxyPresenter { fightAmazonkaPresenter }
+    private val presenter by moxyPresenter { FightAmazonkaPresenter(app.router) }
 
     private lateinit var binding: ActivityMainBinding
     private val personRepo: PersonRepo = PersonRepoImpl()
