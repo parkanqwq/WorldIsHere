@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Cicerone
 import com.kalabukhov.app.worldishere.di.dbModuleUsers
+import com.kalabukhov.app.worldishere.di.mvpModule
 import com.kalabukhov.app.worldishere.di.retrofitModule
 import com.kalabukhov.app.worldishere.rest.ContextHolder
 import org.koin.android.ext.koin.androidContext
@@ -44,6 +45,7 @@ class App : Application() {
 //    val gitHabUsersApi: GitHubApi = retrofit.create(GitHubApi::class.java)
 //    val gitHabUsersApiRepo: GitHubApiRepo = retrofit.create(GitHubApiRepo::class.java)
 
+    // попытался ойти от Cicerone через модули, коин, но что то пошло не так и не работает
     private val cicerone = Cicerone.create()
     val router get() = cicerone.router
     val navigatorHolder get() = cicerone.getNavigatorHolder()
@@ -56,7 +58,7 @@ class App : Application() {
         initDependencies()
         startKoin {
             androidContext(this@App)
-            modules(dbModuleUsers, retrofitModule)
+            modules(dbModuleUsers, retrofitModule, mvpModule)
         }
     }
 

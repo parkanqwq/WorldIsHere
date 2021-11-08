@@ -2,10 +2,12 @@ package com.kalabukhov.app.worldishere.ui
 
 import android.os.Handler
 import android.os.Looper
+import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import com.kalabukhov.app.worldishere.Screens
 import com.kalabukhov.app.worldishere.domain.PersonModel
 import com.kalabukhov.app.worldishere.server.PersonDB
+import org.koin.java.KoinJavaComponent.inject
 
 class EditPersonPresenter(
     private val personsGames: PersonDB,

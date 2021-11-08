@@ -19,11 +19,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+import org.koin.android.ext.android.inject
 import java.util.*
 
 class MainActivity : MvpAppCompatActivity(), FightAmazonkaContract.View {
 
-    private val presenter by moxyPresenter { FightAmazonkaPresenter(app.router) }
+    private val fightAmazonkaPresenter: FightAmazonkaPresenter by inject()
+    private val presenter by moxyPresenter { fightAmazonkaPresenter }
 
     private lateinit var binding: ActivityMainBinding
     private val personRepo: PersonRepo = PersonRepoImpl()

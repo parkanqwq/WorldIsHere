@@ -17,7 +17,8 @@ import org.koin.android.ext.android.inject
 
 class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
 
-    private val presenter by moxyPresenter { EditPersonPresenter(PersonDB(), app.router) }
+    private val editPersonPresenter: EditPersonPresenter by inject()
+    private val presenter by moxyPresenter { editPersonPresenter }
 
     private lateinit var binding: ActivityEditPersonBinding
     override fun onCreate(savedInstanceState: Bundle?) {
