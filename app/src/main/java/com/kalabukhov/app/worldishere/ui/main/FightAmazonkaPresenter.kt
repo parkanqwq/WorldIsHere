@@ -3,18 +3,29 @@ package com.kalabukhov.app.worldishere.ui.main
 import android.os.Handler
 import android.os.Looper
 import com.github.terrakok.cicerone.Router
+import com.kalabukhov.app.worldishere.App
 import com.kalabukhov.app.worldishere.bus.AttackEvent
 import com.kalabukhov.app.worldishere.bus.EventBus
 import com.kalabukhov.app.worldishere.bus.HealthEvent
+import com.kalabukhov.app.worldishere.domain.UsersRepositoriesRepo
+import com.kalabukhov.app.worldishere.ui.less5.GitHubUsersRepoActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.java.KoinJavaComponent.inject
+import javax.inject.Inject
 
 class FightAmazonkaPresenter(
     private val router: Router
 ) : FightAmazonkaContract.Presenter() {
 
+    //вот ниже сделал через коин, потому что дагер не понимаю как достать
     private val imAttackBus: EventBus by inject(EventBus::class.java)
+
+    // дагер закоментил, потому что не понятно как он будет инджектится
+    //  пробовал апп прокидывать , не работает
+//    @Inject
+//    lateinit var imAttackBus: EventBus
+
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var beginFight = true
     private var theAnd = true

@@ -4,12 +4,11 @@ import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Cicerone
-import com.kalabukhov.app.worldishere.di.dbModuleUsers
-import com.kalabukhov.app.worldishere.di.mvpModule
-import com.kalabukhov.app.worldishere.di.retrofitModule
+import com.kalabukhov.app.worldishere.di.*
 import com.kalabukhov.app.worldishere.rest.ContextHolder
+import dagger.internal.DaggerCollections
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import org.koin.core.context.GlobalContext.startKoin
 
 // самодельный класс cicerone
 //class App : Application() {
@@ -53,12 +52,21 @@ class App : Application() {
 //    val imAttackBus = EventBus()
 //    val amazonkaAttackBus = EventBus()
 
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent
+            .builder()
+            .dbModuleUsers(DbModuleUsers(this))
+            .dbModuleUsersRepositories(DbModuleUsersRepositories(this))
+            .build()
+    }
+
     override fun onCreate() {
         super.onCreate()
         initDependencies()
+        // коин оставил, на нем у меня запрашивает ЕвенБас, не знаю как запустить его на дагере
         startKoin {
             androidContext(this@App)
-            modules(dbModuleUsers, retrofitModule, mvpModule)
+            modules(mvpModule)
         }
     }
 

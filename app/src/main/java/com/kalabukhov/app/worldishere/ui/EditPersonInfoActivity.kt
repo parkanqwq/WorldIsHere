@@ -17,6 +17,13 @@ import org.koin.android.ext.android.inject
 
 class EditPersonInfoActivity : MvpAppCompatActivity(), EditPersonContract.View {
 
+
+
+    /*
+    вот тут ниже самое непонятное, что передать вместо EditPersonPresenter(PersonDB(), app.router)
+    так как editPersonPresenter не работает. с дагером вообще не понятно
+    инициализируу в onCreate, а вставлять результат выше, не понятно
+     */
     private val editPersonPresenter: EditPersonPresenter by inject()
     private val presenter by moxyPresenter { EditPersonPresenter(PersonDB(), app.router) }
 
