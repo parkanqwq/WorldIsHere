@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kalabukhov.app.worldishere.R
+import com.kalabukhov.app.worldishere.app
 import com.kalabukhov.app.worldishere.domain.entity.UserEntity
 import com.kalabukhov.app.worldishere.databinding.ActivityGitHubTabBinding
 import com.kalabukhov.app.worldishere.domain.GitHubRepoEntity
@@ -18,19 +19,31 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 import java.util.*
+import javax.inject.Inject
 
 class GitHubTab : AppCompatActivity() {
 
     private lateinit var binding: ActivityGitHubTabBinding
     private var disposable: CompositeDisposable = CompositeDisposable()
 //    private val userRepo by lazy { app.userRepo }
-    private val userRepo: UsersRepo by inject()
-    private val gitHabUsersApi: GitHubApi by inject()
+
+    //ниже коин
+//    private val userRepo: UsersRepo by inject()
+//    private val gitHabUsersApi: GitHubApi by inject()
+
+    @Inject
+    lateinit var userRepo: UsersRepo
+
+    @Inject
+    lateinit var gitHabUsersApi: GitHubApi
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGitHubTabBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        app.appComponent.inject(this)
 
         binding.recyclerView.adapter = adapterRoom
         binding.findUserButtonView.setOnClickListener {

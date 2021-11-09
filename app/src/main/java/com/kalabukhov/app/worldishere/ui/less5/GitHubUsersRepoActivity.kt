@@ -20,20 +20,31 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.internal.wait
 import org.koin.android.ext.android.inject
 import java.util.*
+import javax.inject.Inject
 
 class GitHubUsersRepoActivity : AppCompatActivity() {
 
     private var disposable: CompositeDisposable = CompositeDisposable()
     private lateinit var binding: ActivityGitHubUsersRepoBinding
     private val adapter = AdapterGitHubUsersRepo()
-    private val userRepositoriesRepo: UsersRepositoriesRepo
-    by inject()
-    private val gitHabUsersApiRepo: GitHubApiRepo by inject()
+
+
+    //ниже коин, все пучком работат и коин и дагер
+    //private val gitHabUsersApiRepo: GitHubApiRepo by inject()
+    //private val userRepositoriesRepo: UsersRepositoriesRepo by inject()
+
+    @Inject
+    lateinit var gitHabUsersApiRepo: GitHubApiRepo
+
+    @Inject
+    lateinit var userRepositoriesRepo: UsersRepositoriesRepo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGitHubUsersRepoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        app.appComponent.inject(this)
 
         binding.repoRecyclerView.adapter = adapter
         disposableForUsers()

@@ -24,6 +24,11 @@ import java.util.*
 
 class MainActivity : MvpAppCompatActivity(), FightAmazonkaContract.View {
 
+    /*
+    вот тут ниже самое непонятное, что передать вместо FightAmazonkaPresenter(app.router))
+    так как editPersonPresenter не работает. с дагером вообще не понятно
+    инициализируу в onCreate, а вставлять результат выше, не понятно
+     */
     private val fightAmazonkaPresenter: FightAmazonkaPresenter by inject()
     private val presenter by moxyPresenter { FightAmazonkaPresenter(app.router) }
 
